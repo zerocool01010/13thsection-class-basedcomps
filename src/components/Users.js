@@ -3,12 +3,6 @@ import { Component } from "react"; //siempre importar Component from react cuand
 import User from "./User";
 import classes from "./Users.module.css";
 
-const DUMMY_USERS = [
-  { id: "u1", name: "Max" },
-  { id: "u2", name: "Manuel" },
-  { id: "u3", name: "Julie" },
-];
-
 class Users extends Component {
   //hacer que la clase creada (en este caso Users) herede la clase Component que importamos de React
 
@@ -30,7 +24,7 @@ class Users extends Component {
     
     const usersList = (
       <ul>
-        {DUMMY_USERS.map((user) => (
+        {this.props.users.map((user) => (
           <User key={user.id} name={user.name} />
         ))}
       </ul>

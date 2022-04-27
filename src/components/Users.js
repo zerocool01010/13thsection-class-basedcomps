@@ -1,15 +1,46 @@
-import { useState } from 'react';
-import User from './User';
+import { useState } from "react";
+import { Component } from "react"; //siempre importar Component from react cuando trabajemos con clases
+import User from "./User";
 
-import classes from './Users.module.css';
+import classes from "./Users.module.css";
 
 const DUMMY_USERS = [
-  { id: 'u1', name: 'Max' },
-  { id: 'u2', name: 'Manuel' },
-  { id: 'u3', name: 'Julie' },
+  { id: "u1", name: "Max" },
+  { id: "u2", name: "Manuel" },
+  { id: "u3", name: "Julie" },
 ];
 
-const Users = () => {
+class Users extends Component {
+  //hacer que la clase creada (en este caso Users) herede la clase Component que importamos de React
+
+  constructor() {
+    super(); //para hacer referencia al super constructor ya que estamos heredando de otra clase, entonces hay que hacer referencia al constructor de esa clase superior que estamos heredando
+    this.state = {
+      showUsers: true,
+      more: "Test",
+    }; //en el constructor los state siempre deben ser obj y siempre deben ser una propiedad llamada "state"
+  }
+
+  toggleUsersHandler() {
+    this.setState({
+      //setState es el metodo por el cual modificamos el state de la clase en la cual estamos, y since solo podemos tener un unico this.state por clase, entonces todos los estados deben ir adentro
+      showUsers: false, //a diferencia de los components functions, donde el nuevo state sobreescribe el viejo state, con clases el nuevo state se mergea con el viejo, por lo cual cambia solo lo especificado, pero mantiene lo no especificado
+    }); // en el caso anterior modificara el bool de showUsers pero no hara nada con el string de more, lo mantendra tal cual esta
+  }
+
+  render() {
+    return (
+      <div className={classes.users}>
+        <button onClick={this.toggleUsersHandler.bind(this)}>{/* el bind sirve para decirle algo asi como que el this se refiere al contexto de esta clase */}
+          {this.showUsers ? "Hide" : "Show"} Users
+        </button>
+        {this.showUsers && this.usersList}
+      </div>
+    );
+  }
+}
+
+/* const Users = () => {
   const [showUsers, setShowUsers] = useState(true);
 
   const toggleUsersHandler = () => {
@@ -32,6 +63,6 @@ const Users = () => {
       {showUsers && usersList}
     </div>
   );
-};
+}; */
 
 export default Users;

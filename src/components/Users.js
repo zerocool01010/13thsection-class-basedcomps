@@ -1,7 +1,6 @@
-import { useState } from "react";
+/* import { useState } from "react"; */
 import { Component } from "react"; //siempre importar Component from react cuando trabajemos con clases
 import User from "./User";
-
 import classes from "./Users.module.css";
 
 const DUMMY_USERS = [
@@ -22,19 +21,27 @@ class Users extends Component {
   }
 
   toggleUsersHandler() {
-    this.setState({
-      //setState es el metodo por el cual modificamos el state de la clase en la cual estamos, y since solo podemos tener un unico this.state por clase, entonces todos los estados deben ir adentro
-      showUsers: false, //a diferencia de los components functions, donde el nuevo state sobreescribe el viejo state, con clases el nuevo state se mergea con el viejo, por lo cual cambia solo lo especificado, pero mantiene lo no especificado
+    this.setState((curState) => { //setState es el metodo por el cual modificamos el state de la clase en la cual estamos, y since solo podemos tener un unico this.state por clase, entonces todos los estados deben ir adentro
+      return {showUsers: !curState.showUsers}; //a diferencia de los components functions, donde el nuevo state sobreescribe el viejo state, con clases el nuevo state se mergea con el viejo, por lo cual cambia solo lo especificado, pero mantiene lo no especificado
     }); // en el caso anterior modificara el bool de showUsers pero no hara nada con el string de more, lo mantendra tal cual esta
   }
 
   render() {
+    
+    const usersList = (
+      <ul>
+        {DUMMY_USERS.map((user) => (
+          <User key={user.id} name={user.name} />
+        ))}
+      </ul>
+    );
+
     return (
       <div className={classes.users}>
         <button onClick={this.toggleUsersHandler.bind(this)}>{/* el bind sirve para decirle algo asi como que el this se refiere al contexto de esta clase */}
-          {this.showUsers ? "Hide" : "Show"} Users
+          {this.state.showUsers ? "Hide" : "Show"} Users
         </button>
-        {this.showUsers && this.usersList}
+        {this.state.showUsers && usersList}
       </div>
     );
   }

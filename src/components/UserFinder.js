@@ -1,14 +1,17 @@
-import { Fragment, useState, useEffect, Component } from "react";
+import { Fragment, /* useState, useEffect, */ Component } from "react";
 
 import Users from "./Users";
 import classes from "./userFinder.module.css";
 import UsersContext from "../store/users-context";
+import ErrorBoundary from './errorBoundary'
 
 class UserFinder extends Component {
+    static contextType = UsersContext; //solamente puedo conectar un class-based comp con un context, no mas, es la limitacion de los contexts en clases
+
   constructor() {
     super();
     this.state = {
-      filteredUsers: DUMMY_USERS,
+      filteredUsers: [],
       searchTerm: "",
     };
   }
@@ -17,6 +20,7 @@ class UserFinder extends Component {
     //Se envia la http request...
     //y cuando el componente se monta
     console.log("componente montado");
+    this.setState({filteredUsers: this.context.users}) //users es la prop definida en el contexto en users-context.js
   }
 
   componentDidUpdate(p, prevState) {
@@ -26,7 +30,7 @@ class UserFinder extends Component {
     if (prevState.searchTerm !== this.state.searchTerm) {
       //compara el estado previo con el actual, sin esta condicion generamos un infinite loop
       this.setState({
-        filteredUsers: DUMMY_USERS.filter(
+        filteredUsers: this.context.users.filter(
           (user) => user.name.toUpperCase().includes(this.state.searchTerm) //con toUpperCase paso a mayuscula todo para que la comparacion sea en mayuscula siempre y despreciar la diff entre minus y mayus, y abajo hago lo mismo
         ),
       });
@@ -40,15 +44,15 @@ class UserFinder extends Component {
   render() {
     return (
       <Fragment>
-        <UsersContext.Consumer>
           <div className={classes.finder}>
             <input
               type="search"
               onChange={this.searchChangeHandler.bind(this)}
             />
           </div>
+          <ErrorBoundary>
           <Users users={this.state.filteredUsers} />
-        </UsersContext.Consumer>
+          </ErrorBoundary>
       </Fragment>
     );
   }

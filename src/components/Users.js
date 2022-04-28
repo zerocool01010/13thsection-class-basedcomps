@@ -14,6 +14,12 @@ class Users extends Component {
     }; //en el constructor los state siempre deben ser obj y siempre deben ser una propiedad llamada "state"
   }
 
+  componentDidUpdate(){
+    if (this.props.users.length === 0) { //si no llegan usuarios filtrados
+      throw new Error('No users provided!')
+    }
+  }
+
   toggleUsersHandler() {
     this.setState((curState) => { //setState es el metodo por el cual modificamos el state de la clase en la cual estamos, y since solo podemos tener un unico this.state por clase, entonces todos los estados deben ir adentro
       return {showUsers: !curState.showUsers}; //a diferencia de los components functions, donde el nuevo state sobreescribe el viejo state, con clases el nuevo state se mergea con el viejo, por lo cual cambia solo lo especificado, pero mantiene lo no especificado

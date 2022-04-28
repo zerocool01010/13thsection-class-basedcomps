@@ -1,10 +1,17 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from "react";
 
-import Users from './Users';
+import Users from "./Users";
+import classes from "./userFinder.module.css";
+
+const DUMMY_USERS = [
+  { id: "u1", name: "Max" },
+  { id: "u2", name: "Manuel" },
+  { id: "u3", name: "Julie" },
+];
 
 const UserFinder = () => {
   const [filteredUsers, setFilteredUsers] = useState(DUMMY_USERS);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setFilteredUsers(
@@ -13,12 +20,14 @@ const UserFinder = () => {
   }, [searchTerm]);
 
   const searchChangeHandler = (event) => {
-    setSearchTerm(event.target.value);
+    setSearchTerm((event.target.value).charAt(0).toUpperCase()); //charAt me toma por posicion el char del string que quiero luego tratar como una letra mayuscula para las comparaciones con el toUpperCase
   };
 
   return (
     <Fragment>
-      <input type='search' onChange={searchChangeHandler} />
+      <div className={classes.finder}>
+        <input type="search" onChange={searchChangeHandler} />
+      </div>
       <Users users={filteredUsers} />
     </Fragment>
   );

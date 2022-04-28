@@ -2,12 +2,7 @@ import { Fragment, useState, useEffect, Component } from "react";
 
 import Users from "./Users";
 import classes from "./userFinder.module.css";
-
-const DUMMY_USERS = [
-  { id: "u1", name: "Max" },
-  { id: "u2", name: "Manuel" },
-  { id: "u3", name: "Julie" },
-];
+import UsersContext from "../store/users-context";
 
 class UserFinder extends Component {
   constructor() {
@@ -45,10 +40,15 @@ class UserFinder extends Component {
   render() {
     return (
       <Fragment>
-        <div className={classes.finder}>
-          <input type="search" onChange={this.searchChangeHandler.bind(this)} />
-        </div>
-        <Users users={this.state.filteredUsers} />
+        <UsersContext.Consumer>
+          <div className={classes.finder}>
+            <input
+              type="search"
+              onChange={this.searchChangeHandler.bind(this)}
+            />
+          </div>
+          <Users users={this.state.filteredUsers} />
+        </UsersContext.Consumer>
       </Fragment>
     );
   }

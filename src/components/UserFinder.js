@@ -22,14 +22,14 @@ class UserFinder extends Component {
     if (prevState.searchTerm !== this.state.searchTerm) { //compara el estado previo con el actual, sin esta condicion generamos un infinite loop
       this.setState({
         filteredUsers: DUMMY_USERS.filter((user) =>
-          user.name.includes(this.state.searchTerm)
+          user.name.toUpperCase().includes(this.state.searchTerm) //con toUpperCase paso a mayuscula todo para que la comparacion sea en mayuscula siempre y despreciar la diff entre minus y mayus, y abajo hago lo mismo
         ),
       });
     }
   }
 
   searchChangeHandler(event) {
-    this.setState({ searchTerm: (event.target.value).charAt(0).toUpperCase() });
+    this.setState({ searchTerm: (event.target.value).toUpperCase() }); //paso a mayus esto para la comparacion posterior
   }
 
   render() {
